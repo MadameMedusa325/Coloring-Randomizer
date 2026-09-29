@@ -109,6 +109,11 @@ button{
   color:white;
 }
 
+.started-button{
+  background:var(--pink-light);
+  color:var(--pink-dark);
+}
+
 .danger{
   background:#a94d5d;
   color:white;
@@ -229,6 +234,98 @@ details summary{
   font-size:14px;
 }
 
+
+/* CURRENTLY COLORING */
+
+.current-card{
+  border-top:5px solid var(--pink);
+}
+
+.current-summary{
+  background:linear-gradient(135deg,var(--pink-pale),var(--green-pale));
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:15px;
+  text-align:center;
+  margin-bottom:15px;
+}
+
+.current-total{
+  font-size:26px;
+  font-weight:bold;
+  color:var(--pink-dark);
+}
+
+.current-subtitle{
+  font-size:14px;
+  color:var(--green-dark);
+  margin-top:4px;
+}
+
+.started-book{
+  border-top:1px solid var(--border);
+  padding:14px 0;
+}
+
+.started-book:first-child{
+  border-top:none;
+}
+
+.started-book-name{
+  color:var(--pink-dark);
+  font-weight:bold;
+  font-size:18px;
+  margin-bottom:8px;
+}
+
+.started-page{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  background:linear-gradient(135deg,var(--pink-pale),var(--green-pale));
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:10px 12px;
+  margin:7px 0;
+}
+
+.started-page-number{
+  font-weight:bold;
+  color:var(--green-dark);
+}
+
+.started-actions{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.started-complete{
+  background:var(--green);
+  color:white;
+  padding:8px 10px;
+  margin:0;
+  font-size:13px;
+}
+
+.started-remove{
+  background:var(--pink-light);
+  color:var(--pink-dark);
+  padding:8px 11px;
+  margin:0;
+  font-size:15px;
+}
+
+.empty-current{
+  text-align:center;
+  color:var(--muted);
+  padding:12px 5px 18px;
+}
+
+
+/* MILESTONES */
+
 .milestone-card{
   border-top:5px solid var(--green);
 }
@@ -324,6 +421,9 @@ details summary{
 <h1>🌸 My Coloring Randomizer 🌿</h1>
 <p class="subtitle">What should I color next?</p>
 
+
+<!-- RANDOMIZER -->
+
 <div class="card result">
 
   <div class="result-label">Your next picture</div>
@@ -341,6 +441,15 @@ details summary{
     </button>
 
     <button
+      id="startedButton"
+      class="started-button"
+      onclick="markCurrentStarted()"
+      style="display:none"
+    >
+      🖍️ Mark Started
+    </button>
+
+    <button
       id="completeButton"
       class="complete"
       onclick="markComplete()"
@@ -350,8 +459,11 @@ details summary{
     </button>
 
   </div>
+
 </div>
 
+
+<!-- MY BOOKS -->
 
 <div class="card">
 
@@ -393,6 +505,50 @@ details summary{
 </div>
 
 
+<!-- CURRENTLY COLORING -->
+
+<div class="card current-card">
+
+  <h2>🖍️ Currently Coloring</h2>
+
+  <div id="currentSummary" class="current-summary"></div>
+
+  <div id="currentList"></div>
+
+  <details class="manual-pages">
+
+    <summary>➕ Add Started Page</summary>
+
+    <br>
+
+    <label for="startedBook">Choose a book</label>
+    <select id="startedBook"></select>
+
+    <label for="startedPagesInput">Page number(s)</label>
+
+    <p class="small-note">
+      Enter one or more pages you have already started.
+      Example: 14, 38, 63
+    </p>
+
+    <input
+      id="startedPagesInput"
+      type="text"
+      inputmode="numeric"
+      placeholder="Example: 14, 38, 63"
+    >
+
+    <button class="secondary" onclick="addStartedPages()">
+      Add Started Pages
+    </button>
+
+  </details>
+
+</div>
+
+
+<!-- MILESTONES -->
+
 <div class="card milestone-card">
 
   <h2>🏆 My Milestones</h2>
@@ -405,6 +561,8 @@ details summary{
 
 </div>
 
+
+<!-- ADD BOOK -->
 
 <div class="card">
 
@@ -440,6 +598,8 @@ details summary{
 </div>
 
 
+<!-- OPTIONS -->
+
 <div class="card">
 
   <details>
@@ -447,8 +607,8 @@ details summary{
     <summary>⚙️ Options</summary>
 
     <p class="small-note">
-      Your completed pages and added books are saved on this device
-      in this browser.
+      Your completed pages, started pages, and added books
+      are saved on this device in this browser.
     </p>
 
     <button class="danger" onclick="resetEverything()">
@@ -469,23 +629,20 @@ details summary{
 
 <script>
 
+
+/* DEFAULT BOOKS */
+
 const DEFAULT_BOOKS = [
-  {name:"Babies",pages:100,completed:[]},
-  {name:"Princesses",pages:100,completed:[]},
-  {name:"Villains",pages:100,completed:[]},
-  {name:"Family",pages:100,completed:[]},
-  {name:"The Classics",pages:100,completed:[]},
-  {name:"Pixar",pages:100,completed:[]}
+  {name:"Babies",pages:100,completed:[],started:[]},
+  {name:"Princesses",pages:100,completed:[],started:[]},
+  {name:"Villains",pages:100,completed:[],started:[]},
+  {name:"Family",pages:100,completed:[],started:[]},
+  {name:"The Classics",pages:100,completed:[],started:[]},
+  {name:"Pixar",pages:100,completed:[],started:[]}
 ];
 
 
-/*
-These are the regular milestones.
-
-The final "Collection Complete!" milestone is NOT stored here.
-It is created automatically based on however many total pages
-are currently in your collection.
-*/
+/* MILESTONES */
 
 const MILESTONES = [
 
@@ -554,7 +711,7 @@ let currentBook = null;
 let currentPage = null;
 
 
-/* LOAD SAVED DATA */
+/* LOAD + UPGRADE SAVED DATA */
 
 function loadBooks(){
 
@@ -564,7 +721,40 @@ function loadBooks(){
   if(saved){
 
     try{
-      return JSON.parse(saved);
+
+      const loaded =
+        JSON.parse(saved);
+
+      /*
+      Older saved books don't have a "started" list.
+      This adds one without changing completed pages.
+      */
+
+      loaded.forEach(book=>{
+
+        if(!Array.isArray(book.completed)){
+          book.completed = [];
+        }
+
+        if(!Array.isArray(book.started)){
+          book.started = [];
+        }
+
+        /*
+        Make sure a page cannot be both
+        completed and started.
+        */
+
+        book.started =
+          book.started.filter(
+            page =>
+              !book.completed.includes(page)
+          );
+
+      });
+
+      return loaded;
+
     }
 
     catch(e){}
@@ -595,8 +785,21 @@ function saveBooks(){
 function totalCompleted(){
 
   return books.reduce(
-    (total,book) =>
+    (total,book)=>
       total + book.completed.length,
+    0
+  );
+
+}
+
+
+/* TOTAL STARTED */
+
+function totalStarted(){
+
+  return books.reduce(
+    (total,book)=>
+      total + book.started.length,
     0
   );
 
@@ -608,7 +811,7 @@ function totalCompleted(){
 function totalPages(){
 
   return books.reduce(
-    (total,book) =>
+    (total,book)=>
       total + book.pages,
     0
   );
@@ -622,6 +825,7 @@ function randomize(){
 
   let available = [];
 
+
   books.forEach((book,bookIndex)=>{
 
     for(
@@ -630,7 +834,15 @@ function randomize(){
       page++
     ){
 
-      if(!book.completed.includes(page)){
+      /*
+      Randomizer ignores BOTH completed
+      and currently-started pages.
+      */
+
+      if(
+        !book.completed.includes(page) &&
+        !book.started.includes(page)
+      ){
 
         available.push({
           bookIndex,
@@ -647,12 +859,12 @@ function randomize(){
   if(!available.length){
 
     document.getElementById("bookResult").textContent =
-      "You colored everything! 🎉";
+      "No untouched pages left! 🎉";
 
-    document.getElementById("pageResult").textContent = "";
+    document.getElementById("pageResult").textContent =
+      "";
 
-    document.getElementById("completeButton").style.display =
-      "none";
+    hideCurrentButtons();
 
     return;
 
@@ -667,8 +879,11 @@ function randomize(){
     ];
 
 
-  currentBook = choice.bookIndex;
-  currentPage = choice.page;
+  currentBook =
+    choice.bookIndex;
+
+  currentPage =
+    choice.page;
 
 
   document.getElementById("bookResult").textContent =
@@ -677,8 +892,82 @@ function randomize(){
   document.getElementById("pageResult").textContent =
     "Page " + currentPage;
 
+  document.getElementById("startedButton").style.display =
+    "inline-block";
+
   document.getElementById("completeButton").style.display =
     "inline-block";
+
+}
+
+
+/* HIDE RESULT ACTION BUTTONS */
+
+function hideCurrentButtons(){
+
+  document.getElementById("startedButton").style.display =
+    "none";
+
+  document.getElementById("completeButton").style.display =
+    "none";
+
+}
+
+
+/* MARK RANDOMIZED PAGE STARTED */
+
+function markCurrentStarted(){
+
+  if(
+    currentBook===null ||
+    currentPage===null
+  ){
+    return;
+  }
+
+
+  const book =
+    books[currentBook];
+
+
+  if(
+    !book.completed.includes(currentPage) &&
+    !book.started.includes(currentPage)
+  ){
+
+    book.started.push(currentPage);
+
+    book.started.sort(
+      (a,b)=>a-b
+    );
+
+  }
+
+
+  const startedBookName =
+    book.name;
+
+  const startedPage =
+    currentPage;
+
+
+  saveBooks();
+  renderAll();
+
+
+  document.getElementById("bookResult").textContent =
+    "Started! 🖍️";
+
+  document.getElementById("pageResult").textContent =
+    startedBookName +
+    " — Page " +
+    startedPage;
+
+  hideCurrentButtons();
+
+
+  currentBook = null;
+  currentPage = null;
 
 }
 
@@ -695,13 +984,29 @@ function markComplete(){
   }
 
 
+  const book =
+    books[currentBook];
+
+
+  /*
+  If it happened to be in Started,
+  remove it before completing it.
+  */
+
+  book.started =
+    book.started.filter(
+      page =>
+        page!==currentPage
+    );
+
+
   if(
-    !books[currentBook].completed.includes(currentPage)
+    !book.completed.includes(currentPage)
   ){
 
-    books[currentBook].completed.push(currentPage);
+    book.completed.push(currentPage);
 
-    books[currentBook].completed.sort(
+    book.completed.sort(
       (a,b)=>a-b
     );
 
@@ -709,7 +1014,7 @@ function markComplete(){
 
 
   const finishedBookName =
-    books[currentBook].name;
+    book.name;
 
   const finishedPage =
     currentPage;
@@ -727,8 +1032,7 @@ function markComplete(){
     " — Page " +
     finishedPage;
 
-  document.getElementById("completeButton").style.display =
-    "none";
+  hideCurrentButtons();
 
 
   currentBook = null;
@@ -818,6 +1122,18 @@ function addCompletedPages(){
 
   valid.forEach(page=>{
 
+    /*
+    If page was started, finishing it
+    removes it from Started.
+    */
+
+    books[bookIndex].started =
+      books[bookIndex].started.filter(
+        startedPage =>
+          startedPage!==page
+      );
+
+
     if(
       !books[bookIndex].completed.includes(page)
     ){
@@ -854,7 +1170,7 @@ function addCompletedPages(){
 }
 
 
-/* RESTORE PAGE */
+/* RESTORE COMPLETED PAGE */
 
 function restorePage(bookIndex,page){
 
@@ -862,6 +1178,201 @@ function restorePage(bookIndex,page){
     books[bookIndex].completed.filter(
       p=>p!==page
     );
+
+
+  saveBooks();
+  renderAll();
+
+}
+
+
+/* ADD STARTED PAGES */
+
+function addStartedPages(){
+
+  const bookIndex =
+    Number(
+      document.getElementById("startedBook").value
+    );
+
+
+  const input =
+    document.getElementById("startedPagesInput");
+
+
+  const raw =
+    input.value.trim();
+
+
+  if(!raw){
+
+    alert(
+      "Enter at least one page number."
+    );
+
+    return;
+
+  }
+
+
+  const pieces =
+    raw
+      .split(/[\s,;]+/)
+      .filter(Boolean);
+
+
+  const valid = [];
+  const invalid = [];
+  const alreadyCompleted = [];
+
+
+  pieces.forEach(piece=>{
+
+    const page =
+      Number(piece);
+
+
+    if(
+      Number.isInteger(page) &&
+      page>=1 &&
+      page<=books[bookIndex].pages
+    ){
+
+      if(
+        books[bookIndex].completed.includes(page)
+      ){
+
+        alreadyCompleted.push(page);
+
+      }
+
+      else{
+
+        valid.push(page);
+
+      }
+
+    }
+
+    else{
+
+      invalid.push(piece);
+
+    }
+
+  });
+
+
+  if(invalid.length){
+
+    alert(
+      "Invalid page number(s): " +
+      invalid.join(", ") +
+      ". Use pages 1-" +
+      books[bookIndex].pages +
+      "."
+    );
+
+    return;
+
+  }
+
+
+  valid.forEach(page=>{
+
+    if(
+      !books[bookIndex].started.includes(page)
+    ){
+
+      books[bookIndex].started.push(page);
+
+    }
+
+  });
+
+
+  books[bookIndex].started.sort(
+    (a,b)=>a-b
+  );
+
+
+  const bookName =
+    books[bookIndex].name;
+
+
+  saveBooks();
+
+  input.value = "";
+
+  renderAll();
+
+
+  if(alreadyCompleted.length){
+
+    alert(
+      "Started pages added to " +
+      bookName +
+      ". Page(s) " +
+      alreadyCompleted.join(", ") +
+      " were already completed, so they were not added."
+    );
+
+  }
+
+  else{
+
+    alert(
+      "Started pages added to " +
+      bookName +
+      "!"
+    );
+
+  }
+
+}
+
+
+/* REMOVE STARTED PAGE */
+
+function removeStartedPage(bookIndex,page){
+
+  books[bookIndex].started =
+    books[bookIndex].started.filter(
+      p=>p!==page
+    );
+
+
+  saveBooks();
+  renderAll();
+
+}
+
+
+/* COMPLETE A STARTED PAGE */
+
+function completeStartedPage(bookIndex,page){
+
+  const book =
+    books[bookIndex];
+
+
+  book.started =
+    book.started.filter(
+      p=>p!==page
+    );
+
+
+  if(
+    !book.completed.includes(page)
+  ){
+
+    book.completed.push(page);
+
+    book.completed.sort(
+      (a,b)=>a-b
+    );
+
+  }
 
 
   saveBooks();
@@ -911,7 +1422,8 @@ function addBook(){
   books.push({
     name,
     pages,
-    completed:[]
+    completed:[],
+    started:[]
   });
 
 
@@ -919,7 +1431,8 @@ function addBook(){
   renderAll();
 
 
-  document.getElementById("newBookName").value = "";
+  document.getElementById("newBookName").value =
+    "";
 
   document.getElementById("newBookPages").value =
     "100";
@@ -937,7 +1450,6 @@ function addBook(){
 function escapeHTML(value){
 
   return String(value)
-
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
@@ -947,49 +1459,93 @@ function escapeHTML(value){
 }
 
 
-/* BOOK DROPDOWN */
+/* BOOK DROPDOWNS */
 
-function renderBookDropdown(){
+function renderBookDropdowns(){
 
-  const select =
+  const completedSelect =
     document.getElementById("completedBook");
 
+  const startedSelect =
+    document.getElementById("startedBook");
 
-  if(!select){
-    return;
+
+  const previousCompleted =
+    completedSelect
+      ? completedSelect.value
+      : "";
+
+  const previousStarted =
+    startedSelect
+      ? startedSelect.value
+      : "";
+
+
+  if(completedSelect){
+    completedSelect.innerHTML = "";
   }
 
-
-  const previous =
-    select.value;
-
-
-  select.innerHTML = "";
+  if(startedSelect){
+    startedSelect.innerHTML = "";
+  }
 
 
   books.forEach((book,index)=>{
 
-    const option =
-      document.createElement("option");
+    if(completedSelect){
 
-    option.value =
-      index;
+      const option =
+        document.createElement("option");
 
-    option.textContent =
-      book.name;
+      option.value =
+        index;
 
-    select.appendChild(option);
+      option.textContent =
+        book.name;
+
+      completedSelect.appendChild(option);
+
+    }
+
+
+    if(startedSelect){
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        index;
+
+      option.textContent =
+        book.name;
+
+      startedSelect.appendChild(option);
+
+    }
 
   });
 
 
   if(
-    previous!=="" &&
-    Number(previous)<books.length
+    completedSelect &&
+    previousCompleted!=="" &&
+    Number(previousCompleted)<books.length
   ){
 
-    select.value =
-      previous;
+    completedSelect.value =
+      previousCompleted;
+
+  }
+
+
+  if(
+    startedSelect &&
+    previousStarted!=="" &&
+    Number(previousStarted)<books.length
+  ){
+
+    startedSelect.value =
+      previousStarted;
 
   }
 
@@ -1006,14 +1562,6 @@ function renderOverallProgress(){
   const pages =
     totalPages();
 
-
-  /*
-  This keeps one decimal place.
-
-  Example:
-  2 of 600 = 0.3%
-  instead of rounding down to 0%.
-  */
 
   const percent =
     pages
@@ -1173,7 +1721,128 @@ function renderBooks(){
   });
 
 
-  renderBookDropdown();
+  renderBookDropdowns();
+
+}
+
+
+/* CURRENTLY COLORING */
+
+function renderCurrentlyColoring(){
+
+  const summary =
+    document.getElementById("currentSummary");
+
+  const list =
+    document.getElementById("currentList");
+
+
+  const startedTotal =
+    totalStarted();
+
+
+  summary.innerHTML =
+
+    '<div class="current-total">' +
+    startedTotal +
+    '</div>' +
+
+    '<div class="current-subtitle">' +
+
+    (
+      startedTotal===1
+        ? 'Page Currently In Progress'
+        : 'Pages Currently In Progress'
+    ) +
+
+    '</div>';
+
+
+  list.innerHTML = "";
+
+
+  if(startedTotal===0){
+
+    list.innerHTML =
+
+      '<div class="empty-current">' +
+      'No pages in progress right now. 🌸' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  books.forEach((book,bookIndex)=>{
+
+    if(!book.started.length){
+      return;
+    }
+
+
+    const group =
+      document.createElement("div");
+
+
+    group.className =
+      "started-book";
+
+
+    let pagesHTML = "";
+
+
+    book.started.forEach(page=>{
+
+      pagesHTML +=
+
+        '<div class="started-page">' +
+
+        '<div class="started-page-number">' +
+        '🖍️ Page ' +
+        page +
+        '</div>' +
+
+        '<div class="started-actions">' +
+
+        '<button class="started-complete" ' +
+        'onclick="completeStartedPage(' +
+        bookIndex +
+        ',' +
+        page +
+        ')">' +
+        '✓ Complete' +
+        '</button>' +
+
+        '<button class="started-remove" ' +
+        'onclick="removeStartedPage(' +
+        bookIndex +
+        ',' +
+        page +
+        ')" ' +
+        'title="Remove from Currently Coloring">' +
+        '×' +
+        '</button>' +
+
+        '</div>' +
+
+        '</div>';
+
+    });
+
+
+    group.innerHTML =
+
+      '<div class="started-book-name">' +
+      escapeHTML(book.name) +
+      '</div>' +
+
+      pagesHTML;
+
+
+    list.appendChild(group);
+
+  });
 
 }
 
@@ -1188,14 +1857,6 @@ function renderMilestones(){
   const collectionTotal =
     totalPages();
 
-
-  /*
-  Only show regular milestones that are actually
-  below the size of the collection.
-
-  Then automatically add Collection Complete
-  using the current total number of pages.
-  */
 
   const activeMilestones = [
 
@@ -1217,21 +1878,13 @@ function renderMilestones(){
 
 
   const milestoneList =
-    document.getElementById(
-      "milestoneList"
-    );
-
+    document.getElementById("milestoneList");
 
   const milestoneSummary =
-    document.getElementById(
-      "milestoneSummary"
-    );
-
+    document.getElementById("milestoneSummary");
 
   const nextMilestone =
-    document.getElementById(
-      "nextMilestone"
-    );
+    document.getElementById("nextMilestone");
 
 
   milestoneSummary.innerHTML =
@@ -1248,72 +1901,66 @@ function renderMilestones(){
   milestoneList.innerHTML = "";
 
 
-  activeMilestones.forEach(
-    milestone=>{
+  activeMilestones.forEach(milestone=>{
 
-      const earned =
-        completed >=
-        milestone.amount;
+    const earned =
+      completed>=milestone.amount;
 
 
-      const div =
-        document.createElement("div");
+    const div =
+      document.createElement("div");
 
 
-      div.className =
-        "milestone " +
-        (
-          earned
-            ? "earned"
-            : "locked"
-        );
+    div.className =
+      "milestone " +
+      (
+        earned
+          ? "earned"
+          : "locked"
+      );
 
 
-      div.innerHTML =
+    div.innerHTML =
 
-        '<div class="milestone-icon">' +
+      '<div class="milestone-icon">' +
 
-        (
-          earned
-            ? milestone.icon
-            : "🔒"
-        ) +
+      (
+        earned
+          ? milestone.icon
+          : "🔒"
+      ) +
 
-        '</div>' +
+      '</div>' +
 
-        '<div class="milestone-info">' +
+      '<div class="milestone-info">' +
 
-        '<div class="milestone-name">' +
-        milestone.name +
-        '</div>' +
+      '<div class="milestone-name">' +
+      milestone.name +
+      '</div>' +
 
-        '<div class="milestone-description">' +
-        milestone.description +
-        '</div>' +
+      '<div class="milestone-description">' +
+      milestone.description +
+      '</div>' +
 
-        '</div>' +
+      '</div>' +
 
-        '<div class="milestone-status">' +
+      '<div class="milestone-status">' +
 
-        (
-          earned
-            ? "EARNED!"
-            : milestone.amount
-        ) +
+      (
+        earned
+          ? "EARNED!"
+          : milestone.amount
+      ) +
 
-        '</div>';
-
-
-      milestoneList.appendChild(div);
-
-    }
-  );
+      '</div>';
 
 
-  /*
-  SPECIAL MILESTONE:
-  Complete one entire book.
-  */
+    milestoneList.appendChild(div);
+
+  });
+
+
+  /* SPECIAL BOOK FINISHER */
 
   const finishedBook =
     books.find(
@@ -1381,9 +2028,7 @@ function renderMilestones(){
     '</div>';
 
 
-  milestoneList.appendChild(
-    bookDiv
-  );
+  milestoneList.appendChild(bookDiv);
 
 
   const next =
@@ -1424,7 +2069,6 @@ function renderMilestones(){
   else{
 
     nextMilestone.innerHTML =
-
       '🏆 You completed your entire collection!';
 
   }
@@ -1440,6 +2084,8 @@ function renderAll(){
 
   renderOverallProgress();
 
+  renderCurrentlyColoring();
+
   renderMilestones();
 
 }
@@ -1451,7 +2097,7 @@ function resetEverything(){
 
   if(
     !confirm(
-      "This will erase ALL completed pages and any books you added. Are you sure?"
+      "This will erase ALL completed pages, started pages, and any books you added. Are you sure?"
     )
   ){
     return;
@@ -1492,14 +2138,14 @@ function resetEverything(){
   document.getElementById("pageResult").textContent =
     "";
 
-  document.getElementById("completeButton").style.display =
-    "none";
+  hideCurrentButtons();
 
 }
 
 
 /* START APP */
 
+saveBooks();
 renderAll();
 
 </script>
