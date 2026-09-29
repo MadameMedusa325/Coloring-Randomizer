@@ -6,6 +6,23 @@
 <title>My Coloring Randomizer</title>
 
 <style>
+:root {
+  --pink-dark: #a92f72;
+  --pink: #d45a9e;
+  --pink-light: #f7dbea;
+  --pink-pale: #fff2f8;
+
+  --green-dark: #477653;
+  --green: #73a97e;
+  --green-light: #dcecdf;
+  --green-pale: #f1f8f2;
+
+  --cream: #fffafc;
+  --text: #3f3037;
+  --muted: #7c6871;
+  --border: #eadce3;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -13,8 +30,12 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #fff4fa;
-  color: #3b2632;
+  background: linear-gradient(
+    180deg,
+    var(--pink-pale),
+    var(--green-pale)
+  );
+  color: var(--text);
 }
 
 .container {
@@ -25,32 +46,38 @@ body {
 
 h1 {
   text-align: center;
-  color: #b83280;
+  color: var(--pink-dark);
   margin-bottom: 5px;
+}
+
+h2 {
+  color: var(--green-dark);
 }
 
 .subtitle {
   text-align: center;
-  color: #725565;
+  color: var(--muted);
   margin-top: 0;
 }
 
 .card {
-  background: white;
-  border-radius: 18px;
+  background: rgba(255,255,255,.96);
+  border: 1px solid var(--border);
+  border-radius: 20px;
   padding: 20px;
   margin: 18px 0;
-  box-shadow: 0 4px 15px rgba(0,0,0,.08);
+  box-shadow: 0 5px 16px rgba(92,58,76,.08);
 }
 
 .result {
   text-align: center;
   padding: 25px 15px;
+  border-top: 5px solid var(--pink);
 }
 
 .result-label {
   font-size: 14px;
-  color: #806777;
+  color: var(--green-dark);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -58,7 +85,7 @@ h1 {
 .book-result {
   font-size: 29px;
   font-weight: bold;
-  color: #b83280;
+  color: var(--pink-dark);
   margin: 12px 0 4px;
 }
 
@@ -79,22 +106,22 @@ button {
 }
 
 .primary {
-  background: #b83280;
+  background: var(--pink-dark);
   color: white;
 }
 
 .secondary {
-  background: #e8d2df;
-  color: #563747;
+  background: var(--green-light);
+  color: var(--green-dark);
 }
 
 .complete {
-  background: #629b67;
+  background: var(--green);
   color: white;
 }
 
 .danger {
-  background: #b54141;
+  background: #a94d5d;
   color: white;
 }
 
@@ -107,11 +134,11 @@ select {
   width: 100%;
   padding: 12px;
   margin: 5px 0 10px;
-  border: 1px solid #d4c3cc;
+  border: 1px solid #d7c9d0;
   border-radius: 10px;
   font-size: 16px;
   background: white;
-  color: #3b2632;
+  color: var(--text);
 }
 
 label {
@@ -121,7 +148,7 @@ label {
 }
 
 .book {
-  border-top: 1px solid #eadde4;
+  border-top: 1px solid var(--border);
   padding: 13px 0;
 }
 
@@ -132,12 +159,12 @@ label {
 .book-title {
   font-weight: bold;
   font-size: 18px;
-  color: #8f2865;
+  color: var(--pink-dark);
 }
 
 .stats {
   font-size: 14px;
-  color: #725565;
+  color: var(--muted);
   margin-top: 4px;
 }
 
@@ -148,7 +175,8 @@ label {
 
 .page-chip {
   display: inline-block;
-  background: #f1e2eb;
+  background: var(--green-light);
+  color: var(--green-dark);
   border-radius: 8px;
   padding: 4px 8px;
   margin: 2px;
@@ -157,27 +185,27 @@ label {
 
 .restore {
   cursor: pointer;
-  color: #a0296e;
+  color: var(--pink-dark);
   font-weight: bold;
   margin-left: 3px;
 }
 
 .small-note {
   font-size: 13px;
-  color: #806777;
+  color: var(--muted);
 }
 
 details summary {
   cursor: pointer;
   font-weight: bold;
-  color: #8f2865;
+  color: var(--pink-dark);
   font-size: 18px;
 }
 
 .progress {
   width: 100%;
-  height: 9px;
-  background: #eee3e9;
+  height: 10px;
+  background: var(--pink-light);
   border-radius: 20px;
   overflow: hidden;
   margin-top: 8px;
@@ -185,13 +213,14 @@ details summary {
 
 .progress-bar {
   height: 100%;
-  background: #b83280;
+  background: var(--green);
+  border-radius: 20px;
 }
 
 .manual-pages {
   margin-top: 18px;
   padding-top: 15px;
-  border-top: 1px solid #eadde4;
+  border-top: 1px solid var(--border);
 }
 
 .manual-pages summary {
@@ -202,9 +231,128 @@ details summary {
   margin-left: 0;
 }
 
+
+/* OVERALL PROGRESS */
+
+.overall-box {
+  background: linear-gradient(
+    135deg,
+    var(--pink-pale),
+    var(--green-pale)
+  );
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.overall-title {
+  font-weight: bold;
+  color: var(--pink-dark);
+  font-size: 17px;
+}
+
+.overall-stats {
+  color: var(--green-dark);
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+
+/* MILESTONES */
+
+.milestone-card {
+  border-top: 5px solid var(--green);
+}
+
+.milestone-summary {
+  background: linear-gradient(
+    135deg,
+    var(--pink-pale),
+    var(--green-pale)
+  );
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.milestone-total {
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--pink-dark);
+}
+
+.milestone-subtitle {
+  font-size: 14px;
+  color: var(--green-dark);
+  margin-top: 4px;
+}
+
+.milestone {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px;
+  margin: 9px 0;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.milestone.earned {
+  background: linear-gradient(
+    135deg,
+    var(--green-light),
+    var(--pink-pale)
+  );
+}
+
+.milestone.locked {
+  background: #f5f1f3;
+  opacity: .72;
+}
+
+.milestone-icon {
+  font-size: 27px;
+  width: 38px;
+  text-align: center;
+}
+
+.milestone-info {
+  flex: 1;
+}
+
+.milestone-name {
+  font-weight: bold;
+  color: var(--pink-dark);
+}
+
+.milestone.earned .milestone-name {
+  color: var(--green-dark);
+}
+
+.milestone-description {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+.milestone-status {
+  font-size: 12px;
+  font-weight: bold;
+  color: var(--green-dark);
+}
+
+.next-milestone {
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+}
+
 .footer {
   text-align: center;
-  color: #8c7481;
+  color: var(--muted);
   font-size: 12px;
   margin: 25px 0;
 }
@@ -215,22 +363,36 @@ details summary {
 
 <div class="container">
 
-<h1>🎨 My Coloring Randomizer</h1>
+<h1>🌸 My Coloring Randomizer 🌿</h1>
 <p class="subtitle">What should I color next?</p>
+
+
+<!-- RANDOMIZER -->
 
 <div class="card result">
 
-  <div class="result-label">Your next picture</div>
+  <div class="result-label">
+    Your next picture
+  </div>
 
-  <div id="bookResult" class="book-result">
+  <div
+    id="bookResult"
+    class="book-result"
+  >
     Ready to choose!
   </div>
 
-  <div id="pageResult" class="page-result"></div>
+  <div
+    id="pageResult"
+    class="page-result"
+  ></div>
 
   <div class="buttons">
 
-    <button class="primary" onclick="randomize()">
+    <button
+      class="primary"
+      onclick="randomize()"
+    >
       🎲 Randomize
     </button>
 
@@ -244,21 +406,29 @@ details summary {
     </button>
 
   </div>
+
 </div>
 
+
+<!-- BOOKS -->
 
 <div class="card">
 
   <h2>📚 My Books</h2>
 
+  <div
+    id="overallProgress"
+    class="overall-box"
+  ></div>
+
   <div id="bookList"></div>
 
 
-  <!-- ONE GENERAL ALREADY-COLORED-PAGES SECTION -->
-
   <details class="manual-pages">
 
-    <summary>➕ Add Already Colored Pages</summary>
+    <summary>
+      ➕ Add Already Colored Pages
+    </summary>
 
     <br>
 
@@ -274,7 +444,8 @@ details summary {
     </label>
 
     <p class="small-note">
-      Enter one or more page numbers separated by commas or spaces.
+      Enter one or more page numbers separated
+      by commas or spaces.
       Example: 5, 12, 24, 52
     </p>
 
@@ -297,15 +468,42 @@ details summary {
 </div>
 
 
+<!-- MILESTONES -->
+
+<div class="card milestone-card">
+
+  <h2>🏆 My Milestones</h2>
+
+  <div
+    id="milestoneSummary"
+    class="milestone-summary"
+  ></div>
+
+  <div id="milestoneList"></div>
+
+  <div
+    id="nextMilestone"
+    class="next-milestone"
+  ></div>
+
+</div>
+
+
+<!-- ADD BOOK -->
+
 <div class="card">
 
   <details>
 
-    <summary>➕ Add Another Book</summary>
+    <summary>
+      ➕ Add Another Book
+    </summary>
 
     <br>
 
-    <label>Book name</label>
+    <label>
+      Book name
+    </label>
 
     <input
       id="newBookName"
@@ -314,7 +512,9 @@ details summary {
     >
 
 
-    <label>Number of pages</label>
+    <label>
+      Number of pages
+    </label>
 
     <input
       id="newBookPages"
@@ -336,15 +536,19 @@ details summary {
 </div>
 
 
+<!-- OPTIONS -->
+
 <div class="card">
 
   <details>
 
-    <summary>⚙️ Options</summary>
+    <summary>
+      ⚙️ Options
+    </summary>
 
     <p class="small-note">
-      Your completed pages and added books are saved on this device
-      in this browser.
+      Your completed pages and added books
+      are saved on this device in this browser.
     </p>
 
     <button
@@ -360,7 +564,8 @@ details summary {
 
 
 <div class="footer">
-  Made for coloring one mystery page at a time 💗
+  🌸 Made for coloring one mystery page
+  at a time 🌿
 </div>
 
 </div>
@@ -368,13 +573,123 @@ details summary {
 
 <script>
 
+/* DEFAULT BOOKS */
+
 const DEFAULT_BOOKS = [
-  {name:"Babies", pages:100, completed:[]},
-  {name:"Princesses", pages:100, completed:[]},
-  {name:"Villains", pages:100, completed:[]},
-  {name:"Family", pages:100, completed:[]},
-  {name:"The Classics", pages:100, completed:[]},
-  {name:"Pixar", pages:100, completed:[]}
+
+  {
+    name:"Babies",
+    pages:100,
+    completed:[]
+  },
+
+  {
+    name:"Princesses",
+    pages:100,
+    completed:[]
+  },
+
+  {
+    name:"Villains",
+    pages:100,
+    completed:[]
+  },
+
+  {
+    name:"Family",
+    pages:100,
+    completed:[]
+  },
+
+  {
+    name:"The Classics",
+    pages:100,
+    completed:[]
+  },
+
+  {
+    name:"Pixar",
+    pages:100,
+    completed:[]
+  }
+
+];
+
+
+/* MILESTONES */
+
+const MILESTONES = [
+
+  {
+    amount:1,
+    name:"First Picture!",
+    description:"Complete your first coloring page.",
+    icon:"🌸"
+  },
+
+  {
+    amount:5,
+    name:"Getting Started",
+    description:"Complete 5 coloring pages.",
+    icon:"🌿"
+  },
+
+  {
+    amount:10,
+    name:"Coloring Streak",
+    description:"Complete 10 coloring pages.",
+    icon:"⭐"
+  },
+
+  {
+    amount:25,
+    name:"Coloring Fan",
+    description:"Complete 25 coloring pages.",
+    icon:"🎨"
+  },
+
+  {
+    amount:50,
+    name:"Halfway to 100",
+    description:"Complete 50 coloring pages.",
+    icon:"🌺"
+  },
+
+  {
+    amount:100,
+    name:"100 Pictures!",
+    description:"Complete 100 coloring pages.",
+    icon:"🏆"
+  },
+
+  {
+    amount:250,
+    name:"Coloring Champion",
+    description:"Complete 250 coloring pages.",
+    icon:"👑"
+  },
+
+  {
+    amount:500,
+    name:"Coloring Superstar",
+    description:"Complete 500 coloring pages.",
+    icon:"💖"
+  },
+
+  {
+    amount:750,
+    name:"Coloring Legend",
+    description:"Complete 750 coloring pages.",
+    icon:"✨"
+  },
+
+  {
+    amount:1000,
+    name:"Master Colorist",
+    description:"Complete 1,000 coloring pages.",
+    icon:"🏆"
+  }
+
 ];
 
 
@@ -389,12 +704,16 @@ let currentPage = null;
 function loadBooks() {
 
   const saved =
-    localStorage.getItem("coloringRandomizerBooks");
+    localStorage.getItem(
+      "coloringRandomizerBooks"
+    );
 
   if (saved) {
 
     try {
+
       return JSON.parse(saved);
+
     }
 
     catch(e) {}
@@ -404,6 +723,7 @@ function loadBooks() {
   return JSON.parse(
     JSON.stringify(DEFAULT_BOOKS)
   );
+
 }
 
 
@@ -419,32 +739,63 @@ function saveBooks() {
 }
 
 
+/* TOTAL COMPLETED */
+
+function totalCompleted() {
+
+  return books.reduce(
+    (total,book) =>
+      total + book.completed.length,
+    0
+  );
+
+}
+
+
+/* TOTAL PAGES */
+
+function totalPages() {
+
+  return books.reduce(
+    (total,book) =>
+      total + book.pages,
+    0
+  );
+
+}
+
+
 /* RANDOMIZER */
 
 function randomize() {
 
   let available = [];
 
-  books.forEach((book, bookIndex) => {
 
-    for (
-      let page = 1;
-      page <= book.pages;
-      page++
-    ) {
+  books.forEach(
+    (book,bookIndex) => {
 
-      if (!book.completed.includes(page)) {
+      for (
+        let page = 1;
+        page <= book.pages;
+        page++
+      ) {
 
-        available.push({
-          bookIndex,
-          page
-        });
+        if (
+          !book.completed.includes(page)
+        ) {
+
+          available.push({
+            bookIndex,
+            page
+          });
+
+        }
 
       }
 
     }
-
-  });
+  );
 
 
   if (!available.length) {
@@ -458,19 +809,24 @@ function randomize() {
       "none";
 
     return;
+
   }
 
 
   const choice =
     available[
       Math.floor(
-        Math.random() * available.length
+        Math.random() *
+        available.length
       )
     ];
 
 
-  currentBook = choice.bookIndex;
-  currentPage = choice.page;
+  currentBook =
+    choice.bookIndex;
+
+  currentPage =
+    choice.page;
 
 
   bookResult.textContent =
@@ -481,6 +837,7 @@ function randomize() {
 
   completeButton.style.display =
     "inline-block";
+
 }
 
 
@@ -495,25 +852,31 @@ function markComplete() {
 
 
   if (
-    !books[currentBook].completed
+    !books[currentBook]
+      .completed
       .includes(currentPage)
   ) {
 
-    books[currentBook].completed
+    books[currentBook]
+      .completed
       .push(currentPage);
 
-    books[currentBook].completed
+
+    books[currentBook]
+      .completed
       .sort((a,b) => a-b);
 
   }
 
 
   saveBooks();
-  renderBooks();
+
+  renderAll();
 
 
   bookResult.textContent =
     "Completed! 🎉";
+
 
   pageResult.textContent =
     books[currentBook].name +
@@ -527,10 +890,11 @@ function markComplete() {
 
   currentBook = null;
   currentPage = null;
+
 }
 
 
-/* ADD PAGES THAT WERE ALREADY COLORED */
+/* ADD PREVIOUSLY COLORED PAGES */
 
 function addCompletedPages() {
 
@@ -548,7 +912,8 @@ function addCompletedPages() {
     );
 
 
-  const raw = input.value.trim();
+  const raw =
+    input.value.trim();
 
 
   if (!raw) {
@@ -558,6 +923,7 @@ function addCompletedPages() {
     );
 
     return;
+
   }
 
 
@@ -571,27 +937,32 @@ function addCompletedPages() {
   const invalid = [];
 
 
-  pieces.forEach(piece => {
+  pieces.forEach(
+    piece => {
 
-    const page = Number(piece);
+      const page =
+        Number(piece);
 
-    if (
-      Number.isInteger(page) &&
-      page >= 1 &&
-      page <= books[bookIndex].pages
-    ) {
 
-      valid.push(page);
+      if (
+        Number.isInteger(page) &&
+        page >= 1 &&
+        page <=
+          books[bookIndex].pages
+      ) {
+
+        valid.push(page);
+
+      }
+
+      else {
+
+        invalid.push(piece);
+
+      }
 
     }
-
-    else {
-
-      invalid.push(piece);
-
-    }
-
-  });
+  );
 
 
   if (invalid.length) {
@@ -605,25 +976,31 @@ function addCompletedPages() {
     );
 
     return;
+
   }
 
 
-  valid.forEach(page => {
+  valid.forEach(
+    page => {
 
-    if (
-      !books[bookIndex].completed
-        .includes(page)
-    ) {
+      if (
+        !books[bookIndex]
+          .completed
+          .includes(page)
+      ) {
 
-      books[bookIndex].completed
-        .push(page);
+        books[bookIndex]
+          .completed
+          .push(page);
+
+      }
 
     }
+  );
 
-  });
 
-
-  books[bookIndex].completed
+  books[bookIndex]
+    .completed
     .sort((a,b) => a-b);
 
 
@@ -631,7 +1008,7 @@ function addCompletedPages() {
 
   input.value = "";
 
-  renderBooks();
+  renderAll();
 
 
   alert(
@@ -639,10 +1016,11 @@ function addCompletedPages() {
     books[bookIndex].name +
     "!"
   );
+
 }
 
 
-/* RESTORE A PAGE */
+/* RESTORE PAGE */
 
 function restorePage(
   bookIndex,
@@ -650,24 +1028,32 @@ function restorePage(
 ) {
 
   books[bookIndex].completed =
-    books[bookIndex].completed
-      .filter(p => p !== page);
+    books[bookIndex]
+      .completed
+      .filter(
+        p => p !== page
+      );
 
 
   saveBooks();
-  renderBooks();
+
+  renderAll();
+
 }
 
 
-/* ADD A NEW BOOK */
+/* ADD NEW BOOK */
 
 function addBook() {
 
   const name =
     newBookName.value.trim();
 
+
   const pages =
-    parseInt(newBookPages.value);
+    parseInt(
+      newBookPages.value
+    );
 
 
   if (!name) {
@@ -677,6 +1063,7 @@ function addBook() {
     );
 
     return;
+
   }
 
 
@@ -687,46 +1074,72 @@ function addBook() {
     );
 
     return;
+
   }
 
 
   books.push({
+
     name,
     pages,
     completed:[]
+
   });
 
 
   saveBooks();
 
-  renderBooks();
+  renderAll();
 
 
   newBookName.value = "";
-  newBookPages.value = "100";
+
+  newBookPages.value =
+    "100";
 
 
   alert(
     name + " was added!"
   );
+
 }
 
 
-/* PROTECT BOOK NAMES */
+/* SAFE BOOK NAMES */
 
 function escapeHTML(v) {
 
   return String(v)
 
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
 }
 
 
-/* UPDATE BOOK DROPDOWN */
+/* BOOK DROPDOWN */
 
 function renderBookDropdown() {
 
@@ -746,27 +1159,91 @@ function renderBookDropdown() {
   select.innerHTML = "";
 
 
-  books.forEach((book,index) => {
+  books.forEach(
+    (book,index) => {
 
-    const option =
-      document.createElement("option");
+      const option =
+        document.createElement(
+          "option"
+        );
 
-    option.value = index;
-    option.textContent = book.name;
 
-    select.appendChild(option);
+      option.value =
+        index;
 
-  });
+      option.textContent =
+        book.name;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
 
 
   if (
     previous !== "" &&
-    Number(previous) < books.length
+    Number(previous) <
+      books.length
   ) {
 
-    select.value = previous;
+    select.value =
+      previous;
 
   }
+
+}
+
+
+/* OVERALL PROGRESS */
+
+function renderOverallProgress() {
+
+  const completed =
+    totalCompleted();
+
+  const pages =
+    totalPages();
+
+  const percent =
+    pages
+      ? Math.round(
+          completed /
+          pages *
+          100
+        )
+      : 0;
+
+
+  document.getElementById(
+    "overallProgress"
+  ).innerHTML =
+
+    '<div class="overall-title">' +
+    '🌸 Overall Collection Progress' +
+    '</div>' +
+
+    '<div class="overall-stats">' +
+
+    completed +
+    ' of ' +
+    pages +
+    ' pages completed • ' +
+    percent +
+    '%' +
+
+    '</div>' +
+
+    '<div class="progress">' +
+
+    '<div class="progress-bar" ' +
+    'style="width:' +
+    percent +
+    '%"></div>' +
+
+    '</div>';
 
 }
 
@@ -784,111 +1261,382 @@ function renderBooks() {
   container.innerHTML = "";
 
 
-  books.forEach((book,index) => {
+  books.forEach(
+    (book,index) => {
 
-    const div =
-      document.createElement("div");
-
-
-    div.className = "book";
-
-
-    const remaining =
-      book.pages -
-      book.completed.length;
+      const div =
+        document.createElement(
+          "div"
+        );
 
 
-    const percent =
-      Math.round(
-        book.completed.length /
-        book.pages *
-        100
+      div.className =
+        "book";
+
+
+      const remaining =
+        book.pages -
+        book.completed.length;
+
+
+      const percent =
+        Math.round(
+          book.completed.length /
+          book.pages *
+          100
+        );
+
+
+      let completedHTML;
+
+
+      if (
+        book.completed.length
+      ) {
+
+        completedHTML =
+
+          '<div class="completed-pages">' +
+
+          book.completed
+            .map(
+              page =>
+
+              '<span class="page-chip">' +
+
+              page +
+
+              ' <span class="restore" ' +
+
+              'onclick="restorePage(' +
+              index +
+              ',' +
+              page +
+              ')" ' +
+
+              'title="Restore page">' +
+              '×</span>' +
+
+              '</span>'
+
+            )
+            .join("") +
+
+          '</div>';
+
+      }
+
+      else {
+
+        completedHTML =
+
+          '<div class="small-note">' +
+          'No completed pages yet.' +
+          '</div>';
+
+      }
+
+
+      div.innerHTML =
+
+        '<div class="book-title">' +
+
+        escapeHTML(
+          book.name
+        ) +
+
+        '</div>' +
+
+
+        '<div class="stats">' +
+
+        book.completed.length +
+        ' completed • ' +
+
+        remaining +
+        ' remaining • ' +
+
+        book.pages +
+        ' total' +
+
+        '</div>' +
+
+
+        '<div class="progress">' +
+
+        '<div class="progress-bar" ' +
+
+        'style="width:' +
+        percent +
+        '%"></div>' +
+
+        '</div>' +
+
+
+        completedHTML;
+
+
+      container.appendChild(
+        div
       );
 
-
-    let completedHTML;
-
-
-    if (book.completed.length) {
-
-      completedHTML =
-        '<div class="completed-pages">' +
-
-        book.completed.map(page =>
-
-          '<span class="page-chip">' +
-
-          page +
-
-          ' <span class="restore" ' +
-
-          'onclick="restorePage(' +
-          index +
-          ',' +
-          page +
-          ')" ' +
-
-          'title="Restore page">×</span>' +
-
-          '</span>'
-
-        ).join("") +
-
-        '</div>';
-
     }
-
-    else {
-
-      completedHTML =
-        '<div class="small-note">' +
-        'No completed pages yet.' +
-        '</div>';
-
-    }
-
-
-    div.innerHTML =
-
-      '<div class="book-title">' +
-      escapeHTML(book.name) +
-      '</div>' +
-
-      '<div class="stats">' +
-
-      book.completed.length +
-      ' completed • ' +
-
-      remaining +
-      ' remaining • ' +
-
-      book.pages +
-      ' total' +
-
-      '</div>' +
-
-      '<div class="progress">' +
-
-      '<div class="progress-bar" ' +
-      'style="width:' +
-      percent +
-      '%"></div>' +
-
-      '</div>' +
-
-      completedHTML;
-
-
-    container.appendChild(div);
-
-  });
+  );
 
 
   renderBookDropdown();
+
 }
 
 
-/* RESET EVERYTHING */
+/* MILESTONES */
+
+function renderMilestones() {
+
+  const completed =
+    totalCompleted();
+
+
+  const milestoneList =
+    document.getElementById(
+      "milestoneList"
+    );
+
+
+  const milestoneSummary =
+    document.getElementById(
+      "milestoneSummary"
+    );
+
+
+  const nextMilestone =
+    document.getElementById(
+      "nextMilestone"
+    );
+
+
+  milestoneSummary.innerHTML =
+
+    '<div class="milestone-total">' +
+    completed +
+    '</div>' +
+
+    '<div class="milestone-subtitle">' +
+    'Total Pictures Colored' +
+    '</div>';
+
+
+  milestoneList.innerHTML = "";
+
+
+  MILESTONES.forEach(
+    milestone => {
+
+      const earned =
+        completed >=
+        milestone.amount;
+
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+
+      div.className =
+        "milestone " +
+        (
+          earned
+            ? "earned"
+            : "locked"
+        );
+
+
+      div.innerHTML =
+
+        '<div class="milestone-icon">' +
+
+        (
+          earned
+            ? milestone.icon
+            : "🔒"
+        ) +
+
+        '</div>' +
+
+
+        '<div class="milestone-info">' +
+
+        '<div class="milestone-name">' +
+        milestone.name +
+        '</div>' +
+
+        '<div class="milestone-description">' +
+        milestone.description +
+        '</div>' +
+
+        '</div>' +
+
+
+        '<div class="milestone-status">' +
+
+        (
+          earned
+            ? "EARNED!"
+            : milestone.amount
+        ) +
+
+        '</div>';
+
+
+      milestoneList.appendChild(
+        div
+      );
+
+    }
+  );
+
+
+  /* SPECIAL BOOK COMPLETION MILESTONE */
+
+  const finishedBook =
+    books.find(
+      book =>
+        book.pages > 0 &&
+        book.completed.length >=
+        book.pages
+    );
+
+
+  const bookDiv =
+    document.createElement(
+      "div"
+    );
+
+
+  bookDiv.className =
+    "milestone " +
+    (
+      finishedBook
+        ? "earned"
+        : "locked"
+    );
+
+
+  bookDiv.innerHTML =
+
+    '<div class="milestone-icon">' +
+
+    (
+      finishedBook
+        ? "📚"
+        : "🔒"
+    ) +
+
+    '</div>' +
+
+
+    '<div class="milestone-info">' +
+
+    '<div class="milestone-name">' +
+    'Book Finisher' +
+    '</div>' +
+
+    '<div class="milestone-description">' +
+
+    (
+      finishedBook
+
+        ? "You completed every page in " +
+          escapeHTML(
+            finishedBook.name
+          ) +
+          "!"
+
+        : "Complete every page in one coloring book."
+    ) +
+
+    '</div>' +
+
+    '</div>' +
+
+
+    '<div class="milestone-status">' +
+
+    (
+      finishedBook
+        ? "EARNED!"
+        : "SPECIAL"
+    ) +
+
+    '</div>';
+
+
+  milestoneList.appendChild(
+    bookDiv
+  );
+
+
+  const next =
+    MILESTONES.find(
+      milestone =>
+        completed <
+        milestone.amount
+    );
+
+
+  if (next) {
+
+    const needed =
+      next.amount -
+      completed;
+
+
+    nextMilestone.innerHTML =
+
+      '🌿 ' +
+
+      needed +
+
+      (
+        needed === 1
+          ? ' more page'
+          : ' more pages'
+      ) +
+
+      ' until <strong>' +
+
+      next.name +
+
+      '</strong>!';
+
+  }
+
+  else {
+
+    nextMilestone.innerHTML =
+
+      '🏆 You earned every page-count milestone!';
+
+  }
+
+}
+
+
+/* RENDER EVERYTHING */
+
+function renderAll() {
+
+  renderBooks();
+
+  renderOverallProgress();
+
+  renderMilestones();
+
+}
+
+
+/* RESET */
 
 function resetEverything() {
 
@@ -913,7 +1661,9 @@ function resetEverything() {
 
   books =
     JSON.parse(
-      JSON.stringify(DEFAULT_BOOKS)
+      JSON.stringify(
+        DEFAULT_BOOKS
+      )
     );
 
 
@@ -922,22 +1672,27 @@ function resetEverything() {
 
 
   saveBooks();
-  renderBooks();
+
+  renderAll();
 
 
   bookResult.textContent =
     "Ready to choose!";
 
-  pageResult.textContent = "";
+
+  pageResult.textContent =
+    "";
+
 
   completeButton.style.display =
     "none";
+
 }
 
 
-/* INITIAL DISPLAY */
+/* START APP */
 
-renderBooks();
+renderAll();
 
 </script>
 
