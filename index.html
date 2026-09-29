@@ -4,56 +4,942 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Coloring Randomizer</title>
+
 <style>
-*{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:#fff4fa;color:#3b2632}
-.container{width:92%;max-width:650px;margin:30px auto} h1{text-align:center;color:#b83280;margin-bottom:5px}
-.subtitle{text-align:center;color:#725565;margin-top:0}.card{background:white;border-radius:18px;padding:20px;margin:18px 0;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-.result{text-align:center;padding:25px 15px}.result-label{font-size:14px;color:#806777;text-transform:uppercase;letter-spacing:1px}
-.book-result{font-size:29px;font-weight:bold;color:#b83280;margin:12px 0 4px}.page-result{font-size:24px;font-weight:bold;margin-bottom:16px}
-button{border:none;border-radius:12px;padding:13px 16px;margin:5px;font-size:16px;font-weight:bold;cursor:pointer}
-.primary{background:#b83280;color:white}.secondary{background:#e8d2df;color:#563747}.complete{background:#629b67;color:white}.danger{background:#b54141;color:white}
-.buttons{text-align:center}input{width:100%;padding:12px;margin:5px 0 10px;border:1px solid #d4c3cc;border-radius:10px;font-size:16px}
-label{font-weight:bold;display:block;margin-top:8px}.book{border-top:1px solid #eadde4;padding:13px 0}.book:first-child{border-top:none}
-.book-title{font-weight:bold;font-size:18px;color:#8f2865}.stats{font-size:14px;color:#725565;margin-top:4px}.completed-pages{margin-top:8px;line-height:1.8}
-.page-chip{display:inline-block;background:#f1e2eb;border-radius:8px;padding:4px 8px;margin:2px;font-size:13px}.restore{cursor:pointer;color:#a0296e;font-weight:bold;margin-left:3px}
-.small-note{font-size:13px;color:#806777}details summary{cursor:pointer;font-weight:bold;color:#8f2865;font-size:18px}
-.progress{width:100%;height:9px;background:#eee3e9;border-radius:20px;overflow:hidden;margin-top:8px}.progress-bar{height:100%;background:#b83280}
-.manual-pages{margin-top:12px;padding-top:10px;border-top:1px dashed #eadde4}.manual-pages summary{font-size:14px}.manual-pages button{margin-left:0}
-.footer{text-align:center;color:#8c7481;font-size:12px;margin:25px 0}
-</style></head><body><div class="container">
-<h1>🎨 My Coloring Randomizer</h1><p class="subtitle">What should I color next?</p>
-<div class="card result"><div class="result-label">Your next picture</div><div id="bookResult" class="book-result">Ready to choose!</div><div id="pageResult" class="page-result"></div>
-<div class="buttons"><button class="primary" onclick="randomize()">🎲 Randomize</button><button id="completeButton" class="complete" onclick="markComplete()" style="display:none;">✓ Mark Completed</button></div></div>
-<div class="card"><h2>📚 My Books</h2><div id="bookList"></div></div>
-<div class="card"><details><summary>➕ Add Another Book</summary><br><label>Book name</label><input id="newBookName" type="text" placeholder="Example: Disney Animals">
-<label>Number of pages</label><input id="newBookPages" type="number" min="1" value="100"><button class="primary" onclick="addBook()">Add Book</button></details></div>
-<div class="card"><details><summary>⚙️ Options</summary><p class="small-note">Your completed pages and added books are saved on this device in this browser.</p>
-<button class="danger" onclick="resetEverything()">Reset All Data</button></details></div>
-<div class="footer">Made for coloring one mystery page at a time 💗</div></div>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #fff4fa;
+  color: #3b2632;
+}
+
+.container {
+  width: 92%;
+  max-width: 650px;
+  margin: 30px auto;
+}
+
+h1 {
+  text-align: center;
+  color: #b83280;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  text-align: center;
+  color: #725565;
+  margin-top: 0;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin: 18px 0;
+  box-shadow: 0 4px 15px rgba(0,0,0,.08);
+}
+
+.result {
+  text-align: center;
+  padding: 25px 15px;
+}
+
+.result-label {
+  font-size: 14px;
+  color: #806777;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.book-result {
+  font-size: 29px;
+  font-weight: bold;
+  color: #b83280;
+  margin: 12px 0 4px;
+}
+
+.page-result {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 13px 16px;
+  margin: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.primary {
+  background: #b83280;
+  color: white;
+}
+
+.secondary {
+  background: #e8d2df;
+  color: #563747;
+}
+
+.complete {
+  background: #629b67;
+  color: white;
+}
+
+.danger {
+  background: #b54141;
+  color: white;
+}
+
+.buttons {
+  text-align: center;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  margin: 5px 0 10px;
+  border: 1px solid #d4c3cc;
+  border-radius: 10px;
+  font-size: 16px;
+  background: white;
+  color: #3b2632;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 8px;
+}
+
+.book {
+  border-top: 1px solid #eadde4;
+  padding: 13px 0;
+}
+
+.book:first-child {
+  border-top: none;
+}
+
+.book-title {
+  font-weight: bold;
+  font-size: 18px;
+  color: #8f2865;
+}
+
+.stats {
+  font-size: 14px;
+  color: #725565;
+  margin-top: 4px;
+}
+
+.completed-pages {
+  margin-top: 8px;
+  line-height: 1.8;
+}
+
+.page-chip {
+  display: inline-block;
+  background: #f1e2eb;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin: 2px;
+  font-size: 13px;
+}
+
+.restore {
+  cursor: pointer;
+  color: #a0296e;
+  font-weight: bold;
+  margin-left: 3px;
+}
+
+.small-note {
+  font-size: 13px;
+  color: #806777;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #8f2865;
+  font-size: 18px;
+}
+
+.progress {
+  width: 100%;
+  height: 9px;
+  background: #eee3e9;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: #b83280;
+}
+
+.manual-pages {
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 1px solid #eadde4;
+}
+
+.manual-pages summary {
+  font-size: 18px;
+}
+
+.manual-pages button {
+  margin-left: 0;
+}
+
+.footer {
+  text-align: center;
+  color: #8c7481;
+  font-size: 12px;
+  margin: 25px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎨 My Coloring Randomizer</h1>
+<p class="subtitle">What should I color next?</p>
+
+<div class="card result">
+
+  <div class="result-label">Your next picture</div>
+
+  <div id="bookResult" class="book-result">
+    Ready to choose!
+  </div>
+
+  <div id="pageResult" class="page-result"></div>
+
+  <div class="buttons">
+
+    <button class="primary" onclick="randomize()">
+      🎲 Randomize
+    </button>
+
+    <button
+      id="completeButton"
+      class="complete"
+      onclick="markComplete()"
+      style="display:none;"
+    >
+      ✓ Mark Completed
+    </button>
+
+  </div>
+</div>
+
+
+<div class="card">
+
+  <h2>📚 My Books</h2>
+
+  <div id="bookList"></div>
+
+
+  <!-- ONE GENERAL ALREADY-COLORED-PAGES SECTION -->
+
+  <details class="manual-pages">
+
+    <summary>➕ Add Already Colored Pages</summary>
+
+    <br>
+
+    <label for="completedBook">
+      Choose a book
+    </label>
+
+    <select id="completedBook"></select>
+
+
+    <label for="completedPagesInput">
+      Page number(s)
+    </label>
+
+    <p class="small-note">
+      Enter one or more page numbers separated by commas or spaces.
+      Example: 5, 12, 24, 52
+    </p>
+
+    <input
+      id="completedPagesInput"
+      type="text"
+      inputmode="numeric"
+      placeholder="Example: 5, 12, 24, 52"
+    >
+
+    <button
+      class="secondary"
+      onclick="addCompletedPages()"
+    >
+      Add Completed Pages
+    </button>
+
+  </details>
+
+</div>
+
+
+<div class="card">
+
+  <details>
+
+    <summary>➕ Add Another Book</summary>
+
+    <br>
+
+    <label>Book name</label>
+
+    <input
+      id="newBookName"
+      type="text"
+      placeholder="Example: Disney Animals"
+    >
+
+
+    <label>Number of pages</label>
+
+    <input
+      id="newBookPages"
+      type="number"
+      min="1"
+      value="100"
+    >
+
+
+    <button
+      class="primary"
+      onclick="addBook()"
+    >
+      Add Book
+    </button>
+
+  </details>
+
+</div>
+
+
+<div class="card">
+
+  <details>
+
+    <summary>⚙️ Options</summary>
+
+    <p class="small-note">
+      Your completed pages and added books are saved on this device
+      in this browser.
+    </p>
+
+    <button
+      class="danger"
+      onclick="resetEverything()"
+    >
+      Reset All Data
+    </button>
+
+  </details>
+
+</div>
+
+
+<div class="footer">
+  Made for coloring one mystery page at a time 💗
+</div>
+
+</div>
+
+
 <script>
-const DEFAULT_BOOKS=[{name:"Babies",pages:100,completed:[]},{name:"Princesses",pages:100,completed:[]},{name:"Villains",pages:100,completed:[]},{name:"Family",pages:100,completed:[]},{name:"The Classics",pages:100,completed:[]},{name:"Pixar",pages:100,completed:[]}];
-let books=loadBooks(),currentBook=null,currentPage=null;
-function loadBooks(){const saved=localStorage.getItem("coloringRandomizerBooks");if(saved){try{return JSON.parse(saved)}catch(e){}}return JSON.parse(JSON.stringify(DEFAULT_BOOKS))}
-function saveBooks(){localStorage.setItem("coloringRandomizerBooks",JSON.stringify(books))}
-function randomize(){let available=[];books.forEach((book,bookIndex)=>{for(let page=1;page<=book.pages;page++)if(!book.completed.includes(page))available.push({bookIndex,page})});
-if(!available.length){bookResult.textContent="You colored everything! 🎉";pageResult.textContent="";completeButton.style.display="none";return}
-const choice=available[Math.floor(Math.random()*available.length)];currentBook=choice.bookIndex;currentPage=choice.page;bookResult.textContent=books[currentBook].name;pageResult.textContent="Page "+currentPage;completeButton.style.display="inline-block"}
-function markComplete(){if(currentBook===null||currentPage===null)return;if(!books[currentBook].completed.includes(currentPage)){books[currentBook].completed.push(currentPage);books[currentBook].completed.sort((a,b)=>a-b)}
-saveBooks();renderBooks();bookResult.textContent="Completed! 🎉";pageResult.textContent=books[currentBook].name+" — Page "+currentPage;completeButton.style.display="none";currentBook=null;currentPage=null}
-function addCompletedPages(bookIndex){const input=document.getElementById("completedInput-"+bookIndex),raw=input.value.trim();if(!raw){alert("Enter at least one page number.");return}
-const pieces=raw.split(/[\s,;]+/).filter(Boolean),valid=[],invalid=[];pieces.forEach(piece=>{const page=Number(piece);if(Number.isInteger(page)&&page>=1&&page<=books[bookIndex].pages)valid.push(page);else invalid.push(piece)});
-if(invalid.length){alert("Invalid page number(s): "+invalid.join(", ")+". Use pages 1-"+books[bookIndex].pages+".");return}
-valid.forEach(page=>{if(!books[bookIndex].completed.includes(page))books[bookIndex].completed.push(page)});books[bookIndex].completed.sort((a,b)=>a-b);saveBooks();renderBooks()}
-function restorePage(bookIndex,page){books[bookIndex].completed=books[bookIndex].completed.filter(p=>p!==page);saveBooks();renderBooks()}
-function addBook(){const name=newBookName.value.trim(),pages=parseInt(newBookPages.value);if(!name){alert("Please enter a book name.");return}if(!pages||pages<1){alert("Please enter the number of pages.");return}
-books.push({name,pages,completed:[]});saveBooks();renderBooks();newBookName.value="";newBookPages.value="100";alert(name+" was added!")}
-function escapeHTML(v){return String(v).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;")}
-function renderBooks(){const container=document.getElementById("bookList");container.innerHTML="";books.forEach((book,index)=>{const div=document.createElement("div");div.className="book";
-const remaining=book.pages-book.completed.length,percent=Math.round(book.completed.length/book.pages*100);
-let completedHTML=book.completed.length?'<div class="completed-pages">'+book.completed.map(page=>'<span class="page-chip">'+page+' <span class="restore" onclick="restorePage('+index+','+page+')" title="Restore page">×</span></span>').join("")+'</div>':'<div class="small-note">No completed pages yet.</div>';
-const manual='<details class="manual-pages"><summary>➕ Add Already Colored Pages</summary><p class="small-note">Enter page numbers separated by commas or spaces. Example: 5, 12, 24, 52</p><input id="completedInput-'+index+'" type="text" inputmode="numeric" placeholder="Example: 5, 12, 24, 52"><button class="secondary" onclick="addCompletedPages('+index+')">Add Completed Pages</button></details>';
-div.innerHTML='<div class="book-title">'+escapeHTML(book.name)+'</div><div class="stats">'+book.completed.length+' completed • '+remaining+' remaining • '+book.pages+' total</div><div class="progress"><div class="progress-bar" style="width:'+percent+'%"></div></div>'+completedHTML+manual;container.appendChild(div)})}
-function resetEverything(){if(!confirm("This will erase ALL completed pages and any books you added. Are you sure?"))return;if(!confirm("Really reset everything? This cannot be undone."))return;
-localStorage.removeItem("coloringRandomizerBooks");books=JSON.parse(JSON.stringify(DEFAULT_BOOKS));currentBook=null;currentPage=null;saveBooks();renderBooks();bookResult.textContent="Ready to choose!";pageResult.textContent="";completeButton.style.display="none"}
+
+const DEFAULT_BOOKS = [
+  {name:"Babies", pages:100, completed:[]},
+  {name:"Princesses", pages:100, completed:[]},
+  {name:"Villains", pages:100, completed:[]},
+  {name:"Family", pages:100, completed:[]},
+  {name:"The Classics", pages:100, completed:[]},
+  {name:"Pixar", pages:100, completed:[]}
+];
+
+
+let books = loadBooks();
+
+let currentBook = null;
+let currentPage = null;
+
+
+/* LOAD SAVED DATA */
+
+function loadBooks() {
+
+  const saved =
+    localStorage.getItem("coloringRandomizerBooks");
+
+  if (saved) {
+
+    try {
+      return JSON.parse(saved);
+    }
+
+    catch(e) {}
+
+  }
+
+  return JSON.parse(
+    JSON.stringify(DEFAULT_BOOKS)
+  );
+}
+
+
+/* SAVE DATA */
+
+function saveBooks() {
+
+  localStorage.setItem(
+    "coloringRandomizerBooks",
+    JSON.stringify(books)
+  );
+
+}
+
+
+/* RANDOMIZER */
+
+function randomize() {
+
+  let available = [];
+
+  books.forEach((book, bookIndex) => {
+
+    for (
+      let page = 1;
+      page <= book.pages;
+      page++
+    ) {
+
+      if (!book.completed.includes(page)) {
+
+        available.push({
+          bookIndex,
+          page
+        });
+
+      }
+
+    }
+
+  });
+
+
+  if (!available.length) {
+
+    bookResult.textContent =
+      "You colored everything! 🎉";
+
+    pageResult.textContent = "";
+
+    completeButton.style.display =
+      "none";
+
+    return;
+  }
+
+
+  const choice =
+    available[
+      Math.floor(
+        Math.random() * available.length
+      )
+    ];
+
+
+  currentBook = choice.bookIndex;
+  currentPage = choice.page;
+
+
+  bookResult.textContent =
+    books[currentBook].name;
+
+  pageResult.textContent =
+    "Page " + currentPage;
+
+  completeButton.style.display =
+    "inline-block";
+}
+
+
+/* MARK RANDOMIZED PAGE COMPLETE */
+
+function markComplete() {
+
+  if (
+    currentBook === null ||
+    currentPage === null
+  ) return;
+
+
+  if (
+    !books[currentBook].completed
+      .includes(currentPage)
+  ) {
+
+    books[currentBook].completed
+      .push(currentPage);
+
+    books[currentBook].completed
+      .sort((a,b) => a-b);
+
+  }
+
+
+  saveBooks();
+  renderBooks();
+
+
+  bookResult.textContent =
+    "Completed! 🎉";
+
+  pageResult.textContent =
+    books[currentBook].name +
+    " — Page " +
+    currentPage;
+
+
+  completeButton.style.display =
+    "none";
+
+
+  currentBook = null;
+  currentPage = null;
+}
+
+
+/* ADD PAGES THAT WERE ALREADY COLORED */
+
+function addCompletedPages() {
+
+  const bookIndex =
+    Number(
+      document.getElementById(
+        "completedBook"
+      ).value
+    );
+
+
+  const input =
+    document.getElementById(
+      "completedPagesInput"
+    );
+
+
+  const raw = input.value.trim();
+
+
+  if (!raw) {
+
+    alert(
+      "Enter at least one page number."
+    );
+
+    return;
+  }
+
+
+  const pieces =
+    raw
+      .split(/[\s,;]+/)
+      .filter(Boolean);
+
+
+  const valid = [];
+  const invalid = [];
+
+
+  pieces.forEach(piece => {
+
+    const page = Number(piece);
+
+    if (
+      Number.isInteger(page) &&
+      page >= 1 &&
+      page <= books[bookIndex].pages
+    ) {
+
+      valid.push(page);
+
+    }
+
+    else {
+
+      invalid.push(piece);
+
+    }
+
+  });
+
+
+  if (invalid.length) {
+
+    alert(
+      "Invalid page number(s): " +
+      invalid.join(", ") +
+      ". Use pages 1-" +
+      books[bookIndex].pages +
+      "."
+    );
+
+    return;
+  }
+
+
+  valid.forEach(page => {
+
+    if (
+      !books[bookIndex].completed
+        .includes(page)
+    ) {
+
+      books[bookIndex].completed
+        .push(page);
+
+    }
+
+  });
+
+
+  books[bookIndex].completed
+    .sort((a,b) => a-b);
+
+
+  saveBooks();
+
+  input.value = "";
+
+  renderBooks();
+
+
+  alert(
+    "Completed pages added to " +
+    books[bookIndex].name +
+    "!"
+  );
+}
+
+
+/* RESTORE A PAGE */
+
+function restorePage(
+  bookIndex,
+  page
+) {
+
+  books[bookIndex].completed =
+    books[bookIndex].completed
+      .filter(p => p !== page);
+
+
+  saveBooks();
+  renderBooks();
+}
+
+
+/* ADD A NEW BOOK */
+
+function addBook() {
+
+  const name =
+    newBookName.value.trim();
+
+  const pages =
+    parseInt(newBookPages.value);
+
+
+  if (!name) {
+
+    alert(
+      "Please enter a book name."
+    );
+
+    return;
+  }
+
+
+  if (!pages || pages < 1) {
+
+    alert(
+      "Please enter the number of pages."
+    );
+
+    return;
+  }
+
+
+  books.push({
+    name,
+    pages,
+    completed:[]
+  });
+
+
+  saveBooks();
+
+  renderBooks();
+
+
+  newBookName.value = "";
+  newBookPages.value = "100";
+
+
+  alert(
+    name + " was added!"
+  );
+}
+
+
+/* PROTECT BOOK NAMES */
+
+function escapeHTML(v) {
+
+  return String(v)
+
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+/* UPDATE BOOK DROPDOWN */
+
+function renderBookDropdown() {
+
+  const select =
+    document.getElementById(
+      "completedBook"
+    );
+
+
+  if (!select) return;
+
+
+  const previous =
+    select.value;
+
+
+  select.innerHTML = "";
+
+
+  books.forEach((book,index) => {
+
+    const option =
+      document.createElement("option");
+
+    option.value = index;
+    option.textContent = book.name;
+
+    select.appendChild(option);
+
+  });
+
+
+  if (
+    previous !== "" &&
+    Number(previous) < books.length
+  ) {
+
+    select.value = previous;
+
+  }
+
+}
+
+
+/* DISPLAY BOOKS */
+
+function renderBooks() {
+
+  const container =
+    document.getElementById(
+      "bookList"
+    );
+
+
+  container.innerHTML = "";
+
+
+  books.forEach((book,index) => {
+
+    const div =
+      document.createElement("div");
+
+
+    div.className = "book";
+
+
+    const remaining =
+      book.pages -
+      book.completed.length;
+
+
+    const percent =
+      Math.round(
+        book.completed.length /
+        book.pages *
+        100
+      );
+
+
+    let completedHTML;
+
+
+    if (book.completed.length) {
+
+      completedHTML =
+        '<div class="completed-pages">' +
+
+        book.completed.map(page =>
+
+          '<span class="page-chip">' +
+
+          page +
+
+          ' <span class="restore" ' +
+
+          'onclick="restorePage(' +
+          index +
+          ',' +
+          page +
+          ')" ' +
+
+          'title="Restore page">×</span>' +
+
+          '</span>'
+
+        ).join("") +
+
+        '</div>';
+
+    }
+
+    else {
+
+      completedHTML =
+        '<div class="small-note">' +
+        'No completed pages yet.' +
+        '</div>';
+
+    }
+
+
+    div.innerHTML =
+
+      '<div class="book-title">' +
+      escapeHTML(book.name) +
+      '</div>' +
+
+      '<div class="stats">' +
+
+      book.completed.length +
+      ' completed • ' +
+
+      remaining +
+      ' remaining • ' +
+
+      book.pages +
+      ' total' +
+
+      '</div>' +
+
+      '<div class="progress">' +
+
+      '<div class="progress-bar" ' +
+      'style="width:' +
+      percent +
+      '%"></div>' +
+
+      '</div>' +
+
+      completedHTML;
+
+
+    container.appendChild(div);
+
+  });
+
+
+  renderBookDropdown();
+}
+
+
+/* RESET EVERYTHING */
+
+function resetEverything() {
+
+  if (
+    !confirm(
+      "This will erase ALL completed pages and any books you added. Are you sure?"
+    )
+  ) return;
+
+
+  if (
+    !confirm(
+      "Really reset everything? This cannot be undone."
+    )
+  ) return;
+
+
+  localStorage.removeItem(
+    "coloringRandomizerBooks"
+  );
+
+
+  books =
+    JSON.parse(
+      JSON.stringify(DEFAULT_BOOKS)
+    );
+
+
+  currentBook = null;
+  currentPage = null;
+
+
+  saveBooks();
+  renderBooks();
+
+
+  bookResult.textContent =
+    "Ready to choose!";
+
+  pageResult.textContent = "";
+
+  completeButton.style.display =
+    "none";
+}
+
+
+/* INITIAL DISPLAY */
+
 renderBooks();
-</script></body></html>
+
+</script>
+
+</body>
+</html>
